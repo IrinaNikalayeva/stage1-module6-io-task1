@@ -1,13 +1,13 @@
 package com.epam.mjc.io;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class FileReader {
+
+    File file = new File("/Users/Iryna/MJC/stage1-module6-io-task1/src/main/resources/Profile.txt");
 
     public Profile getDataFromFile(File file) {
         Map<String, String> finalMap = readData(file);
@@ -16,10 +16,14 @@ public class FileReader {
     }
 
     public Map<String, String> readData(File file) {
-        try  {
+        try(java.io.FileReader fileReader = new java.io.FileReader(file))  {
             Map<String, String> resultMap = new HashMap<>();
-            String result = Files.readString(file.toPath());
-            String[] keyValuePairs = result.split("\n");
+            int ch;
+            StringBuilder result = new StringBuilder();
+            while ((ch = fileReader.read()) != -1) {
+                result.append((char) ch);
+            }
+            String[] keyValuePairs = result.toString().split("\n");
             for (String pair : keyValuePairs) {
                 String[] keyValue = pair.split(":");
                 if (keyValue.length == 2) {
@@ -34,5 +38,10 @@ public class FileReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        FileReader reader = new FileReader();
+        reader.readData(reader.file);
     }
 }

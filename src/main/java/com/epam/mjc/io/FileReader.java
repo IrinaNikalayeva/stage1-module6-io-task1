@@ -7,8 +7,6 @@ import java.util.Map;
 
 public class FileReader {
 
-    File file = new File("/Users/Iryna/MJC/stage1-module6-io-task1/src/main/resources/Profile.txt");
-
     public Profile getDataFromFile(File file) {
         Map<String, String> finalMap = readData(file);
         return new Profile(finalMap.get("Name"), Integer.parseInt(finalMap.get("Age")), finalMap.get("Email"),
@@ -16,8 +14,9 @@ public class FileReader {
     }
 
     public Map<String, String> readData(File file) {
-        try(java.io.FileReader fileReader = new java.io.FileReader(file))  {
-            Map<String, String> resultMap = new HashMap<>();
+        Map<String, String> resultMap = null;
+        try (java.io.FileReader fileReader = new java.io.FileReader(file)) {
+            resultMap = new HashMap<>();
             int ch;
             StringBuilder result = new StringBuilder();
             while ((ch = fileReader.read()) != -1) {
@@ -32,16 +31,9 @@ public class FileReader {
                     resultMap.put(key, value);
                 }
             }
-            System.out.println(resultMap);
-            return resultMap;
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        FileReader reader = new FileReader();
-        reader.readData(reader.file);
+        return resultMap;
     }
 }
